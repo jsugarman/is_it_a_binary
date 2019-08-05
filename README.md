@@ -2,17 +2,19 @@
 
 A summary of various ways to create Command Line Interface tools
 
-##### calling a script.sh - must be prefixed with dir
+##### Plain shell scripts
+*must be prefixed with dir*
 ```
 ./hellow.sh
 ```
 
-##### calling a script without an extension - must, still, be prefixed with dir
+##### Scripts without an extension
+*must, still, be prefixed with dir*
 ```
 ./hellow
 ```
 
-##### calling a shell function
+##### Shell functions
 
 load the function:
 ```
@@ -33,6 +35,16 @@ echo "source $PWD/bash_functions/my-functions.sh" >> ~/.bash_profile
 # start a new terminal
 hellow
 ```
+
+##### Plain ruby binary
+
+```
+bin/hellor
+```
+
+##### Option parser ruby class (stdlib) binary
+
+##### Hanami cli ruby framework binary
 
 ---
 #### TODO

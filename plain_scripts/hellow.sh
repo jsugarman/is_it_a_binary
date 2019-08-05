@@ -1,2 +1,2 @@
 #!/bin/sh
-echo "Hello world script!"
+echo "Hello world script with extension!"

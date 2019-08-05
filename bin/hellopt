@@ -1,0 +1,78 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+
+require 'optparse'
+require 'yaml'
+require 'json'
+
+# p "original arguments: #{ARGV}"
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  # boolean switch to print the version, with no shorthand
+  opts.on_tail("--version", "Show version") do
+    puts '0.0.1'
+    exit
+  end
+
+  # No argument. This will print an options summary, with --help switch at the tail/end.
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+
+  # boolean switch
+  # -v/--verbose or --no-verbose
+  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+    options[:verbose] = v
+  end
+
+  # switch with integer REQUIRED argument (not the lack of square braces)
+  opts.on("-r", "--require STRING", String, "required argument") do |r|
+    options[:require] = r
+  end
+
+  # switch with integer [OPTIONAL] argument
+  opts.on("--sleep [INTEGER]", Integer, "sleep for N seconds before executing") do |n|
+    options[:sleep] = n
+  end
+
+  # switch with string argument
+  opts.on_head("-f", "--file [STRING]", String, "file to do whatever with") do |f|
+    options[:file] = f
+  end
+
+  # switch with argument validation
+  opts.on_head("o", "--output [TYPE]", [:yaml, :json, :xml], "output type (yaml, json, xml)") do |o|
+    options[:output] = o
+  end
+
+  opts.separator ""
+  opts.separator "Common options:"
+end.parse!
+
+if options[:verbose]
+  p "options: #{options}"
+  p "leftover arguments: #{ARGV}"
+end
+
+case options[:output]
+  when :yaml
+    p options.to_yaml
+  when :json
+    p options.to_json
+  when :xml
+    p 'xml, you cannot be serious!'
+end
+
+i = 0
+while i < options.fetch(:sleep, 0)
+  i += 1
+  print '.'
+  sleep 1
+end
+
+p 'done!'
