@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
-
 # frozen_string_literal: true
 
+# Reading:
+# [OptionParser](https://ruby-doc.org/stdlib-2.6.3/libdoc/optparse/rdoc/OptionParser.html)
+# [Adding color to TTY](http://www.andrewnoske.com/wiki/Bash_-_adding_color)
+#
 require 'optparse'
 require 'yaml'
 require 'json'
@@ -10,7 +13,7 @@ require 'json'
 
 options = {}
 OptionParser.new do |opts|
-  opts.banner = "Usage: example.rb [options]"
+  opts.banner = "Usage: bin/hellopt [options]"
 
   # boolean "flag". This will print an options summary, with --help switch at the tail/end.
   opts.on_tail("-h", "--help", "Show this message") do
@@ -19,34 +22,36 @@ OptionParser.new do |opts|
   end
 
   # boolean "flag" to print the version, with no shorthand
-  opts.on_tail("--version", "Show version") do
+  opts.on_tail("-v", "--version", "Show version") do
     puts '0.0.1'
     exit
   end
 
   # boolean switch. yields true/false depending on switch text
-  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+  opts.on("-V", "--[no-]verbose", "Run verbosely") do |v|
     options[:verbose] = v
   end
 
-  # switch with integer REQUIRED argument (note the lack of square braces on STRING)
+  # switch with REQUIRED string argument (note the lack of square braces on STRING)
   opts.on("-r", "--require STRING", String, "required argument") do |r|
     options[:require] = r
   end
 
-  # switch with integer [OPTIONAL] argument, defaulting to 5
+  # switch with [OPTIONAL] integer argument, defaulting to 5
   opts.on("--sleep [INTEGER]", Integer, "sleep for N seconds before executing") do |n|
     options[:sleep] = n || 5
   end
 
   # switch with argument validation
-  opts.on_head("o", "--output [TYPE]", [:yaml, :json, :xml], "output type (yaml, json, xml)") do |o|
+  opts.on_head("-o", "--output [TYPE]", [:yaml, :json, :xml], "output type (yaml, json, xml)") do |o|
     options[:output] = o || :yaml
   end
 
   opts.separator ""
   opts.separator "Common options:"
 end.parse!
+
+# -------------------------------
 
 if options[:verbose]
   puts "options: #{options}"
@@ -65,8 +70,8 @@ end
 i = 0
 while i < options.fetch(:sleep, 0)
   i += 1
-  print '.'
+  printf "\e[32;1m.\e[0m"
   sleep 1
 end
 
-p 'done!'
+printf "\e[32;1mdone!\e[0m \n"

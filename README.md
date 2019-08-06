@@ -2,16 +2,21 @@
 
 A summary of various ways to create Command Line Interface tools
 
+*any executable will have to have its execute mode enabled*
+```
+chmod 755 my-executable
+```
+
 ##### Plain shell scripts
 *must be prefixed with dir*
 ```
-./hellow.sh
+./hellos.sh
 ```
 
 ##### Scripts without an extension
 *must, still, be prefixed with dir*
 ```
-./hellow
+./hellos
 ```
 
 ##### Shell functions
@@ -23,7 +28,10 @@ source $PWD/bash_functions/my-functions.sh
 
 then call:
 ```bash
-hellow
+hellof
+hellof hi
+hellof bye
+twizzler
 ```
 
 you can permanently add the function to you shell startup via ~/.bash_profile | ~/.bash_rc or similar.
@@ -48,7 +56,8 @@ bin/hellor bye
 
 ##### Option parser ruby class (stdlib) binary
 
-A ruby `stdlib` for parsing command line arguments
+A ruby `stdlib` for parsing command line arguments, for when shell scripts args and
+parsing ARGV in ruby scripts get too unwieldy.
 
 ```bash
 # boolean "flags"
@@ -85,7 +94,53 @@ bin/hellopt --output jsonb
 
 ##### ruby CLI frameworks
 ###### rake
+
+The most popular cli framework, this ruby "make" program can take alot
+of the work out of writing simple CLI's. For more complicated CLIs with mutiple options however...
+
 ###### thor
+
+A popular framework used by a lot of other gems (such as `railties`, `guard`)
+
+```bash
+# out of the box help commands
+cli/hellothor help
+cli/hellothor help hello
+```
+
+```bash
+# basic use
+cli/hellothor hello Joel
+```
+
+```bash
+# easy option adding
+option :yell, :type => :boolean
+
+# use:
+  if options[:yell] ...
+
+# examples:
+  cli/hellothor hello Joel --yell
+  cli/hellothor hello Joel --yell --from Jim
+```
+
+```bash
+# required arguments
+option :from, :required => true
+
+# use:
+  if options[:yell] ...
+
+# examples:
+  cli/hellothor hello Joel --yell
+  cli/hellothor hello Joel --yell --from Jim
+```
+```bash
+# sub commands
+# TODO
+```
+
 ###### hanami/cli
 
 

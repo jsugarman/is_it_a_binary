@@ -9,8 +9,23 @@
 # echo "source $PWD/bash_functions/my-functions.sh" >> ~/.bash_profile
 #
 
-function hellow() {
-  echo "hello world function!"
+function hellof() {
+  usage="hellof - say hello\n
+  usage:\n
+    - hellof hi\n
+    - hellof bye
+  "
+
+  case "$1" in
+    hi | Hi)
+      echo "Hiya!"
+      ;;
+    bye | Bye)
+      echo "See ya!"
+      ;;
+    *)
+      echo -e $usage
+  esac
 }
 
 function twizzler() {
@@ -24,7 +39,7 @@ function twizzler() {
   do
     for i in {1..10};
     do
-      i=$(( (i+1) %4 ))
+      i=$(( (i+1) %3 ))
       printf "\r${spin:$i:1}"
       sleep .1
     done;
