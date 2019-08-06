@@ -12,42 +12,36 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: example.rb [options]"
 
-  # boolean switch to print the version, with no shorthand
-  opts.on_tail("--version", "Show version") do
-    puts '0.0.1'
-    exit
-  end
-
-  # No argument. This will print an options summary, with --help switch at the tail/end.
+  # boolean "flag". This will print an options summary, with --help switch at the tail/end.
   opts.on_tail("-h", "--help", "Show this message") do
     puts opts
     exit
   end
 
-  # boolean switch
-  # -v/--verbose or --no-verbose
+  # boolean "flag" to print the version, with no shorthand
+  opts.on_tail("--version", "Show version") do
+    puts '0.0.1'
+    exit
+  end
+
+  # boolean switch. yields true/false depending on switch text
   opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
     options[:verbose] = v
   end
 
-  # switch with integer REQUIRED argument (not the lack of square braces)
+  # switch with integer REQUIRED argument (note the lack of square braces on STRING)
   opts.on("-r", "--require STRING", String, "required argument") do |r|
     options[:require] = r
   end
 
-  # switch with integer [OPTIONAL] argument
+  # switch with integer [OPTIONAL] argument, defaulting to 5
   opts.on("--sleep [INTEGER]", Integer, "sleep for N seconds before executing") do |n|
-    options[:sleep] = n
-  end
-
-  # switch with string argument
-  opts.on_head("-f", "--file [STRING]", String, "file to do whatever with") do |f|
-    options[:file] = f
+    options[:sleep] = n || 5
   end
 
   # switch with argument validation
   opts.on_head("o", "--output [TYPE]", [:yaml, :json, :xml], "output type (yaml, json, xml)") do |o|
-    options[:output] = o
+    options[:output] = o || :yaml
   end
 
   opts.separator ""
@@ -55,8 +49,8 @@ OptionParser.new do |opts|
 end.parse!
 
 if options[:verbose]
-  p "options: #{options}"
-  p "leftover arguments: #{ARGV}"
+  puts "options: #{options}"
+  puts "leftover arguments: #{ARGV}"
 end
 
 case options[:output]
@@ -65,7 +59,7 @@ case options[:output]
   when :json
     p options.to_json
   when :xml
-    p 'xml, you cannot be serious!'
+    puts '</xml>, <nooooooo>nooooooo!</nooooooo>'
 end
 
 i = 0
