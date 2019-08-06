@@ -38,14 +38,17 @@ hellow
 
 ##### Plain ruby binary
 
+Just place `#!/usr/bin/env ruby` in the top of a file, excluding an extension, and start writing ruby. Access commandline arguments in the ruby code using `ARGV`.
+
 ```bash
 bin/hellor
+bin/hellor hi
+bin/hellor bye
 ```
 
 ##### Option parser ruby class (stdlib) binary
 
 A ruby `stdlib` for parsing command line arguments
-
 
 ```bash
 # boolean "flags"
@@ -57,14 +60,6 @@ bin/hellopt --help
 # boolean switches with no args
 bin/hellopt --verbose
 bin/hellopt --no-verbose
-```
-
-```bash
-# switch with required arg
-bin/hellopt --require
-=> missing argument: -r (OptionParser::MissingArgument)
-
-bin/hellopt --require what
 ```
 
 ```bash
@@ -83,12 +78,15 @@ bin/hellopt --sleep
 
 ```bash
 # switch with validated optional arg, and default
-bin/hellopt --output json
 bin/hellopt --output
-bin/hellopt --output xml
+bin/hellopt --output json
+bin/hellopt --output jsonb
 ```
 
-##### Hanami cli ruby framework binary
+##### ruby CLI frameworks
+###### rake
+###### thor
+###### hanami/cli
 
 
 ---
