@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+# frozen_string_literal: true
+require "bundler/setup"
+require "hanami/cli"
+# require 'pry'
+
+module HelloHani
+  class CLI
+    def call(*args)
+      Hanami::CLI.new(Commands).call(*args)
+    end
+
+    module Commands
+      extend Hanami::CLI::Registry
+
+      class Greet < Hanami::CLI::Command
+        argument :greeting, required: true, desc: 'write something!'
+
+        def call(greeting: 'hi')
+          case greeting
+          when /[hi|hello]/
+            puts 'hi, there'
+          when /bye/
+            puts 'seeya!'
+          else
+            puts 'huh?!'
+          end
+        end
+      end
+
+      class Version
+      end
+
+      # Note: there is NO convention between the command name and the
+      # command object class. The manual registration assigns a command
+      # object to a command name.
+      register "greet", Greet
+    end
+  end
+end
+
+HelloHani::CLI.new.call

@@ -4,6 +4,7 @@
 
 # http://whatisthor.com/
 #
+require "bundler/setup"
 require 'thor'
 
 class ThorCLI < Thor
