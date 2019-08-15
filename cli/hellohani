@@ -3,10 +3,21 @@
 # frozen_string_literal: true
 require "bundler/setup"
 require "hanami/cli"
-# require 'pry'
+require 'pry'
+
+# examples:
+# cli/hellohani -v => 1.0.0
+# cli/hellohani greet => hi there
+# cli/hellohani greet -n joel => hi joel
+# cli/hellohani greet --name joel => hi joel
+# cli/hellohani greet -s bye => seeya!
+# cli/hellohani greet -salutation bye -n joel => seeya joel!
+# cli/hellohani meet joel '01-01-2020' => meeting scheduled with joel for:  1 January 2020 00:0000
 
 module HelloHani
   class CLI
+    VERSION = '0.0.1'
+
     def call(*args)
       Hanami::CLI.new(Commands).call(*args)
     end
@@ -14,28 +25,61 @@ module HelloHani
     module Commands
       extend Hanami::CLI::Registry
 
-      class Greet < Hanami::CLI::Command
-        argument :greeting, required: true, desc: 'write something!'
+      class Version < Hanami::CLI::Command
+        desc 'Print version'
 
-        def call(greeting: 'hi')
-          case greeting
-          when /[hi|hello]/
-            puts 'hi, there'
-          when /bye/
-            puts 'seeya!'
+        def call(*)
+          puts VERSION
+        end
+      end
+
+      class Greet < Hanami::CLI::Command
+        desc 'Print greeting'
+        option :salutation, aliases: ['s'], desc: 'say [hi, bye]'
+        option :name, aliases: ['n'], desc: 'name of person to greet!'
+
+        def call(**options)
+          salutation = options.fetch(:salutation, 'hi')
+          name = options.fetch(:name, nil)
+          case salutation
+          when /(hi|hello)/i
+            puts (name ? "hi #{name}" : "hi there stranger")
+          when /bye/i
+            puts (name ? "seeya #{name}!" : "seeya!")
           else
             puts 'huh?!'
           end
         end
       end
 
-      class Version
+      class Meet < Hanami::CLI::Command
+        desc 'Print meeting'
+        argument :meet_who, aliases: ['w', 'who'], required: true, desc: 'name of person to meet'
+        argument :meet_at, aliases: ['a', 'at'], required: true, desc: 'date of meet'
+
+        def call(meet_who:, meet_at:, **options)
+          puts "meeting scheduled with #{meet_who} for: #{date_parse(meet_at).strftime('%e %B %Y %H:%M%S')}"
+        end
+
+        private
+
+        def date_parse(d)
+          if d.downcase.eql?('today')
+            Date.send(d)
+          else
+            Date.parse(d)
+          end
+        rescue StandardError => e
+          raise "invalid date: #{d}"
+        end
       end
 
       # Note: there is NO convention between the command name and the
       # command object class. The manual registration assigns a command
       # object to a command name.
-      register "greet", Greet
+      register "version", Version, aliases: ['-v', '--version']
+      register "greet", Greet, aliases: ['-g', '--greet']
+      register "meet", Meet, aliases: ['-m', '--meet']
     end
   end
 end
