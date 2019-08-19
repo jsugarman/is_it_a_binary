@@ -34,7 +34,7 @@ hellof bye
 twizzler
 ```
 
-you can permanently add the function to you shell startup via ~/.bash_profile | ~/.bash_rc or similar.
+you can permanently add the function to you shell startup via ~/.bash_profile, ~/.bashrc or similar.
 
 ```bash
 # example of loading functions at shell startup

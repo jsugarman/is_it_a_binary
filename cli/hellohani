@@ -11,7 +11,7 @@ require 'pry'
 # cli/hellohani greet -n joel => hi joel
 # cli/hellohani greet --name joel => hi joel
 # cli/hellohani greet -s bye => seeya!
-# cli/hellohani greet -salutation bye -n joel => seeya joel!
+# cli/hellohani greet --say bye -n joel => seeya joel!
 # cli/hellohani meet joel '01-01-2020' => meeting scheduled with joel for:  1 January 2020 00:0000
 
 module HelloHani
@@ -35,20 +35,50 @@ module HelloHani
 
       class Greet < Hanami::CLI::Command
         desc 'Print greeting'
-        option :salutation, aliases: ['s'], desc: 'say [hi, bye]'
+        option :say, aliases: ['s'], desc: 'say [hi, bye]'
         option :name, aliases: ['n'], desc: 'name of person to greet!'
 
         def call(**options)
-          salutation = options.fetch(:salutation, 'hi')
+          salutation = options.fetch(:say, 'hi')
           name = options.fetch(:name, nil)
           case salutation
           when /(hi|hello)/i
             puts (name ? "hi #{name}" : "hi there stranger")
           when /bye/i
-            puts (name ? "seeya #{name}!" : "seeya!")
+            puts (name ? "seeya #{name} \u{1f596}!" : "seeya! \u{1f596}!")
+          when /peace/i
+            puts "..out \u{1f596}"
+          when /end/i
+            puts "..out \u{1f4A5}"
+          when /artme/
+            puts asciiart
           else
             puts 'huh?!'
           end
+        end
+
+        private
+        def asciiart
+          <<~ASCII
+                          ,----------------,             ,---------,
+                    ,-----------------------,          ,"        ,"|
+                  ,"                      ,"|        ,"        ,"  |
+                 +-----------------------+  |      ,"        ,"    |
+                 |  .-----------------.  |  |     +---------+      |
+                 |  |                 |  |  |     | -==----'|      |
+                 |  |  I LOVE CLI!    |  |  |     |         |      |
+                 |  |                 |  |  |/----|`---=    |      |
+                 |  |  $ _            |  |  |   ,/|==== ooo |      ;
+                 |  |                 |  |  |  // |(((( [33]|    ,"
+                 |  `-----------------'  |," .;'| |((((     |  ,"
+                 +-----------------------+  ;;  | |         |,"
+                    /_)______________(_/  //'   | +---------+
+               ___________________________/___  `,
+              /  oooooooooooooooo  .o.  oooo /,   \,"-----------
+             / ==ooooooooooooooo==.o.  ooo= //   ,`\--{)B     ,"
+            /_==__==========__==_ooo__ooo=_/'   /___________,"
+            `-----------------------------'
+          ASCII
         end
       end
 
