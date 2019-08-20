@@ -143,6 +143,24 @@ option :from, :required => true
 
 ###### hanami/cli
 
+A modular framework that uses a class per command
+
+```bash
+cli/hellohani -v
+=> 1.0.0
+```
+
+options
+```bash
+cli/hellohani greet --name fred
+=> hi fred
+
+# aliases/shorthand
+cli/hellohani greet -n fred
+=> hi fred
+```
+
+
 
 ---
 #### TODO

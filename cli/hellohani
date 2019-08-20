@@ -39,9 +39,9 @@ module HelloHani
         option :name, aliases: ['n'], desc: 'name of person to greet!'
 
         def call(**options)
-          salutation = options.fetch(:say, 'hi')
+          say = options.fetch(:say, 'hi')
           name = options.fetch(:name, nil)
-          case salutation
+          case say
           when /(hi|hello)/i
             puts (name ? "hi #{name}" : "hi there stranger")
           when /bye/i
